@@ -9,20 +9,20 @@ def test_suite():
 
         # Unit tests for your API
         doctestunit.DocFileSuite(
-            'README.txt', package='pareto.customoverride',
+            'README.txt', package='pareto.customimages',
             setUp=testing.setUp, tearDown=testing.tearDown),
 
         #doctestunit.DocTestSuite(
-        #    module='pareto.customoverride.mymodule',
+        #    module='pareto.customimages.mymodule',
         #    setUp=testing.setUp, tearDown=testing.tearDown),
 
         # Integration tests that use ZopeTestCase
         #ztc.ZopeDocFileSuite(
-        #    'README.txt', package='pareto.customoverride',
+        #    'README.txt', package='pareto.customimages',
         #    setUp=testing.setUp, tearDown=testing.tearDown),
 
         #ztc.FunctionalDocFileSuite(
-        #    'browser.txt', package='pareto.customoverride'),
+        #    'browser.txt', package='pareto.customimages'),
 
         ])
 

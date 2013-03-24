@@ -3,7 +3,7 @@ import os
 
 version = '1.0'
 
-setup(name='pareto.customoverride',
+setup(name='pareto.customimages',
       version=version,
       description="",
       long_description=open("README.txt").read() + "\n" +

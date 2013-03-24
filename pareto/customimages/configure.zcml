@@ -4,25 +4,25 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="pareto.customoverride">
+    i18n_domain="pareto.customimages">
 
   <five:registerPackage package="." initialize=".initialize" />
 
   <genericsetup:registerProfile
       name="default"
-      title="pareto.customoverride"
+      title="pareto.customimages"
       directory="profiles/default"
-      description="Installs the pareto.customoverride package"
+      description="Installs the pareto.customimages package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <browser:page
-      name="logopanel"
+      name="customimages"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      class=".browser.customoverride.CustomOverride"
+      class=".browser.customimages.CustomImages"
       permission="cmf.ManagePortal"
       />
 
-  <adapter factory=".browser.customoverride.CustomOverrideAdapter" />
+  <adapter factory=".browser.customimages.CustomImagesAdapter" />
 
 </configure>

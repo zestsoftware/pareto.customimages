@@ -1,4 +1,4 @@
-pareto.customoverride Package Readme
+pareto.customimages Package Readme
 =========================
 
 Overview

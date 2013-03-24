@@ -7,13 +7,15 @@ from zope.formlib import form
 from zope.i18nmessageid import MessageFactory
 from plone.app.controlpanel.form import ControlPanelForm
 
+from plone.app.form.validators import null_validator
+
 from OFS.Image import Image
 from OFS.Image import getImageInfo
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 
-_ = MessageFactory('CustomOverride')
+_ = MessageFactory('CustomImages')
 
 LOGO_ID = 'logo.png'
 
@@ -29,7 +31,7 @@ def validateIsImage(value):
     return True
 
 
-class ICustomOverrideSchema(Interface):
+class ICustomImagesSchema(Interface):
 
     image = Bytes(         
         title=_(u'New Image File'),
@@ -38,10 +40,10 @@ class ICustomOverrideSchema(Interface):
         constraint=validateIsImage)
 
 
-class CustomOverrideAdapter(object):
+class CustomImagesAdapter(object):
 
     adapts(IPloneSiteRoot)
-    implements(ICustomOverrideSchema)
+    implements(ICustomImagesSchema)
 
     def __init__(self, context):
         self.context = context
@@ -63,38 +65,74 @@ class CustomOverrideAdapter(object):
     image = property(get_image, set_image)
 
 
-class CustomOverride(ControlPanelForm):
+class CustomImages(ControlPanelForm):
 
-    template = ViewPageTemplateFile('customoverride.pt')
+    template = ViewPageTemplateFile('customimages.pt')
 
-    form_fields = form.FormFields(ICustomOverrideSchema)
-    form_name = _(u'Image Upload Form')
-    label = _(u'Custom override Control Panel')
+    form_fields = form.FormFields(ICustomImagesSchema)
+    form_name = _(u'Upload Form')
+    label = _(u'Custom Images Control Panel')
     description = _(u'Override images in the design.')
 
-    @property
+    @form.action(_(u'label_save', default=u'Save'), name=u'save')
+    def handle_edit_action(self, action, data):
+        CheckAuthenticator(self.request)
+        if form.applyChanges(self.context, self.form_fields, data,
+                             self.adapters):
+            self.status = _("Changes saved.")
+            notify(ConfigurationChangedEvent(self, data))
+            self._on_save(data)
+        else:
+            self.status = _("No changes made.")
+
+    @form.action(_(u'label_cancel', default=u'Cancel'),
+                 validator=null_validator,
+                 name=u'cancel')
+    def handle_cancel_action(self, action, data):
+        IStatusMessage(self.request).addStatusMessage(_("Changes canceled."),
+                                                      type="info")
+        url = getMultiAdapter((self.context, self.request),
+                              name='absolute_url')()
+        self.request.response.redirect(url + '/plone_control_panel')
+        return ''
+
+    @form.action(_(u'label_clear', default=u'Clear'), 
+                 validator=null_validator,
+                 name=u'clear')
+    def handle_clear_action(self, action, data):
+        skins = getToolByName(self.context, 'portal_skins')
+        target = skins.get('custom', self.context)
+        image_id = self.request.form.get('image_id', None)
+        if not image_id:
+            self.status = _("No image id.")
+        elif image_id in target:
+            target._delObject(image_id)
+            self.status = _("Changes saved.")
+        else:
+            self.status = _("No changes made.")
+
     def current_image(self, image_id=LOGO_ID):
         tag = '<span class="discreet"><No Logo Found></span>'
         try:
             image = self.context.restrictedTraverse(image_id)
-            tag = image.tag()
+            tag = image.tag(style='height: auto; max-width: 100%;')
         except KeyError:
             # none was found, return the default tag
             pass
 
         return tag
-
+    
     def _on_save(self, data=None):
         if data is None:
             # no form data, return without doing anything
             return
 
-        new_image = data['image']
+        new_image = data.get('image', None)
         if not new_image:
             # image not uploaded, return without doing anything
             return
 
-        image_id = data['image_id']
+        image_id = self.request.form.get('image_id', None)
         if not image_id:
             # image not uploaded, return without doing anything
             image_id = LOGO_ID
@@ -123,6 +161,6 @@ class CustomOverride(ControlPanelForm):
                 # let's override it, it isn't an expected type.
                 pass
 
-        img = Image(image_id, 'Custom Site Logo', new_image)
-        target._setObject(image_id, img)
+        img = Image(image_id, 'Custom File %s' % image_id, new_image)
+        target._setObject(str(image_id), img)
         return

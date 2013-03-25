@@ -4,21 +4,28 @@ from zope.interface import Interface
 from zope.interface import implements
 from zope.component import adapts
 from zope.formlib import form
+from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from plone.app.controlpanel.form import ControlPanelForm
+from plone.protect import CheckAuthenticator
+from plone.app.controlpanel.events import ConfigurationChangedEvent
 
 from plone.app.form.validators import null_validator
 
 from OFS.Image import Image
 from OFS.Image import getImageInfo
+
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 
-_ = MessageFactory('CustomImages')
+_ = MessageFactory('pareto.customimages')
 
 LOGO_ID = 'logo.png'
-
+INTERFACE = 'pareto.customimages.browser.interfaces.IZeelandiaSettings'
 
 class ImageValidationError(ValidationError):
     """Supplied file does not appear to be an image"""
@@ -111,11 +118,20 @@ class CustomImages(ControlPanelForm):
         else:
             self.status = _("No changes made.")
 
+    def images(self):
+        registry = getUtility(IRegistry)
+        value = registry.records.get('%s.images' % INTERFACE).value
+        images = dict([tuple([str(w) if i == 0 else w 
+                              for i, w in enumerate(v.split('|'))]) 
+                       for v in value])
+        return images
+
     def current_image(self, image_id=LOGO_ID):
         tag = '<span class="discreet"><No Logo Found></span>'
         try:
             image = self.context.restrictedTraverse(image_id)
-            tag = image.tag(style='height: auto; max-width: 100%;')
+            tag = image.tag(style='height: auto; max-width: 100%; '
+                                  'border: 1px dashed #999;')
         except KeyError:
             # none was found, return the default tag
             pass
@@ -133,9 +149,14 @@ class CustomImages(ControlPanelForm):
             return
 
         image_id = self.request.form.get('image_id', None)
-        if not image_id:
-            # image not uploaded, return without doing anything
+        if image_id:
+            image_id = str(image_id)
+        else:
             image_id = LOGO_ID
+
+        image_title = self.request.form.get('image_title', None)
+        if not image_title:
+            image_title = u'Custom Logo'
 
         skins = getToolByName(self.context, 'portal_skins')
         target = self.context
@@ -161,6 +182,6 @@ class CustomImages(ControlPanelForm):
                 # let's override it, it isn't an expected type.
                 pass
 
-        img = Image(image_id, 'Custom File %s' % image_id, new_image)
-        target._setObject(str(image_id), img)
+        img = Image(image_id, 'Custom %s' % image_title, new_image)
+        target._setObject(image_id, img)
         return

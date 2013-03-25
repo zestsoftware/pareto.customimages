@@ -48,8 +48,10 @@
                 Description
             </div>
 
-            <div id="content-core" class="row">
-                <tal:repeat repeat="image_id python:['logo.png', 'footer-logo.png']">
+            <div id="content-core" class="row"
+                 tal:define="images view/images">
+
+                <tal:repeat repeat="image_id images">
                     <form action="."
                           metal:define-macro="master"
                           tal:define="is_fieldsets view/is_fieldsets"
@@ -64,6 +66,10 @@
                                name="image_id"
                                value=""
                                tal:attributes="value image_id" />
+                        <input type="hidden"
+                               name="image_title"
+                               value=""
+                               tal:attributes="value python:images[image_id]" />
     
                         <div metal:define-slot="extra_info" tal:replace="nothing">
                         </div>
@@ -74,7 +80,7 @@
                                              error widget/error"
                                  tal:attributes="class python:'field'+(error and ' error' or '')">
                                 <div class="cell width-1:3 position-0">
-                                    <div class="logo_preview" style="padding: 1em; margin: 0 0 2em; background-color: #ccc; border: 1px solid #999; border-radius: 1em;"
+                                    <div class="logo_preview" style="padding: 1em; margin: 0 0 3em; background-color: #ccc; border: 1px solid #999; border-radius: 1em;"
                                          tal:condition="python:widget.name=='form.image'">
                                         <span tal:replace="structure tag"
                                               tal:define="tag python:view.current_image(image_id)">
@@ -115,7 +121,7 @@
                                     <div class="widget" tal:content="structure widget">
                                         <input type="text" />
                                     </div>
-                                <!-- </fieldset> -->
+
                                     <metal:block define-slot="above_buttons" />
                 
                                     <div class="visualClear"><!-- --></div>

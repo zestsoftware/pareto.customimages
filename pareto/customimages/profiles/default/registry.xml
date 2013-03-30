@@ -1,8 +1,8 @@
 <registry xmlns:i18n="http://xml.zope.org/namespaces/i18n"
           i18n:domain="plone">
   <record field="images"
-          interface="pareto.customimages.browser.interfaces.IZeelandiaSettings"
-          name="pareto.customimages.browser.interfaces.IZeelandiaSettings.images">
+          interface="pareto.customimages.browser.customimages.ICustomImagesSchema"
+          name="pareto.customimages.browser.customimages.ICustomImagesSchema.images">
     <field type="plone.registry.field.List">
       <default>
         <element>logo.png|Logo</element>

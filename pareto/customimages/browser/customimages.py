@@ -25,7 +25,7 @@ from Products.CMFCore.utils import getToolByName
 _ = MessageFactory('pareto.customimages')
 
 LOGO_ID = 'logo.png'
-INTERFACE = 'pareto.customimages.browser.interfaces.IZeelandiaSettings'
+INTERFACE = 'pareto.customimages.browser.customimages.ICustomImagesSchema'
 
 class ImageValidationError(ValidationError):
     """Supplied file does not appear to be an image"""

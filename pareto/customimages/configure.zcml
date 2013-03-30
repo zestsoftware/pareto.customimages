@@ -10,7 +10,7 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="pareto.customimages"
+      title="Custom Images"
       directory="profiles/default"
       description="Installs the pareto.customimages package"
       provides="Products.GenericSetup.interfaces.EXTENSION"

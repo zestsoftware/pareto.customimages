@@ -1,0 +1,74 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-04-08 14:24+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: pareto.customimages\n"
+
+#: ./browser/customimages.py:99
+msgid "Changes canceled."
+msgstr ""
+
+#: ./browser/customimages.py:89
+msgid "Changes saved."
+msgstr ""
+
+#: ./profiles/default/controlpanel.xml
+msgid "Custom Images"
+msgstr ""
+
+#: ./browser/customimages.py:81
+msgid "Custom Images Control Panel"
+msgstr ""
+
+#: ./browser/customimages.py:44
+msgid "New Image File"
+msgstr ""
+
+#: ./browser/customimages.py:93
+msgid "No changes made."
+msgstr ""
+
+#: ./browser/customimages.py:114
+msgid "No image id."
+msgstr ""
+
+#: ./browser/customimages.py:82
+msgid "Override images in the design."
+msgstr ""
+
+#: ./browser/customimages.py:80
+msgid "Upload Form"
+msgstr ""
+
+#: ./browser/customimages.py:45
+msgid "Upload a new image file to replace the existing."
+msgstr ""
+
+#. Default: "Cancel"
+#: ./browser/customimages.py:95
+msgid "label_cancel"
+msgstr ""
+
+#. Default: "Clear"
+#: ./browser/customimages.py:106
+msgid "label_clear"
+msgstr ""
+
+#. Default: "Save"
+#: ./browser/customimages.py:84
+msgid "label_save"
+msgstr ""
+
